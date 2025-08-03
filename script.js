@@ -78,6 +78,17 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
+displayMovements(account1.movements);
+
+// creating new function of displaying total balance of the movements of each, reduce method involved
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce(function (acc, mov) {
+    return acc + mov;
+  }, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+calcDisplayBalance(account1.movements);
 
 // in this new function we learned about the useage of map
 const user = 'Steven Thomas Williams';
@@ -112,7 +123,6 @@ const createUserNames = function (accs) {
 };
 createUserNames(accounts);
 console.log(accounts);
-displayMovements(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
