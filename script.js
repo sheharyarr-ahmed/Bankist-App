@@ -1,4 +1,6 @@
 'use strict';
+// learned about
+// forEach, map, innerHTML, insertAdjacentHTML
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -76,6 +78,40 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
+
+// in this new function we learned about the useage of map
+const user = 'Steven Thomas Williams';
+// const userName = user
+//   .toLowerCase()
+//   .split(' ')
+//   .map(function (name) {
+//     return name[0];
+//   })
+//   .join('');   //this was the original logic but down below it is cinverted into an arrow function.
+// const createUserNames = function (user) {
+//   const userName = user
+//     .toLowerCase()
+//     .split(' ')
+//     .map(name => name[0])
+//     .join('');
+//   return userName;
+// };
+// console.log(createUserNames('sheharyar ahmed memon'));
+
+// creating an function for computing the accounts usernames.
+
+const createUserNames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+    // the reason why we are not retunring anu value in this map function is that we do not want to create an side effect we just want an work to be doneisnde the object which is crete an new property username.
+  });
+};
+createUserNames(accounts);
+console.log(accounts);
 displayMovements(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
