@@ -62,6 +62,8 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // starting point
+
+// the reason we start writing the code in the function is that Writing in the global context is dangerous, unscalable, and error-prone. Always limit scope using functions, blocks, or modules to keep your code clean, safe, and maintainable. we cannot write the variables in the global scope as it may create problems when the code grows so thats we should write the code in functions, IIFE or modules and in this case we write the code in an function.
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
   movements.forEach(function (mov, i) {
