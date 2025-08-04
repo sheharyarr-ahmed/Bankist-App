@@ -78,7 +78,6 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 // creating new function of displaying total balance of the movements of each, reduce method involved
 
@@ -88,29 +87,27 @@ const calcDisplayBalance = function (movements) {
   }, 0);
   labelBalance.textContent = `${balance}€`;
 };
-calcDisplayBalance(account1.movements);
 
 // adding new feature calculate display summary, chaining of map, filrer and reduce involved.
-const calcDisplalySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
-  const out = movements
+  const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)}€`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => int >= 1)
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
 
-calcDisplalySummary(account1.movements);
 // in this new function we learned about the useage of map
 const user = 'Steven Thomas Williams';
 // const userName = user
@@ -143,7 +140,43 @@ const createUserNames = function (accs) {
   });
 };
 createUserNames(accounts);
-console.log(accounts);
+// console.log(accounts);
+
+// EVENT HANDLERS
+// implementing log in system
+let currentAccount;
+btnLogin.addEventListener(
+  'click',
+  function (
+    e //this e is to see the type of event that occured
+  ) {
+    e.preventDefault(); //this method preventDeafault prevents the browser it.s default settings. after creating this function the page will no more reload after pressing the submit button.
+    currentAccount = accounts.find(
+      acc => acc.username === inputLoginUsername.value
+    );
+    console.log(currentAccount);
+
+    if (currentAccount?.pin === Number(inputLoginPin.value)) {
+      //the reason why we added the optional cahininghere is when a user whose username was not registered tries to log init was giving an error but now it will return undefined.
+      // the list of things which should if the above condition appears to be true
+      // 1. display ui & Message
+      labelWelcome.textContent = `Welcome Back, ${
+        currentAccount.owner.split(' ')[0]
+      }`;
+      containerApp.style.opacity = 100;
+      // clearing input fields
+      inputLoginUsername.value = inputLoginPin.value = '';
+      inputLoginPin.blur(); // to remove cursor from it after getting logged in.
+
+      // 2. display movements
+      displayMovements(currentAccount.movements);
+      // 3. display balance
+      calcDisplayBalance(currentAccount.movements);
+      // 4. display summary
+      calcDisplaySummary(currentAccount);
+    }
+  }
+);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
