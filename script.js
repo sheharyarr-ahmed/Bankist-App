@@ -1,6 +1,6 @@
 'use strict';
 // learned about
-// forEach, map, innerHTML, insertAdjacentHTML, optional chaining(?), blur method, find method.
+// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method,
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -211,6 +211,28 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
     updateUI(currentAccount);
+  }
+});
+
+// implementing close account function
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+      //it tells that on which index this current account exists in the accounts array
+    );
+    console.log(index);
+    accounts.splice(index, 1);
+
+    //when closed account gets success hide the ui
+    containerApp.style.opacity = 0;
+
+    // input fields clear as-well
+    inputCloseUsername.value = inputClosePin.value = '';
   }
 });
 
