@@ -1,6 +1,6 @@
 'use strict';
 // learned about
-// forEach, map, innerHTML, insertAdjacentHTML
+// forEach, map, innerHTML, insertAdjacentHTML, optional chaining(?), blur method, find method.
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -81,11 +81,11 @@ const displayMovements = function (movements) {
 
 // creating new function of displaying total balance of the movements of each, reduce method involved
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce(function (acc, mov) {
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce(function (acc, mov) {
     return acc + mov;
   }, 0);
-  labelBalance.textContent = `${balance}€`;
+  labelBalance.textContent = `${acc.balance}€`;
 };
 
 // adding new feature calculate display summary, chaining of map, filrer and reduce involved.
@@ -142,6 +142,16 @@ const createUserNames = function (accs) {
 createUserNames(accounts);
 // console.log(accounts);
 
+// updating UI function
+const updateUI = function (acc) {
+  // 2. display movements
+  displayMovements(acc.movements);
+  // 3. display balance
+  calcDisplayBalance(acc);
+  // 4. display summary
+  calcDisplaySummary(acc);
+};
+
 // EVENT HANDLERS
 // implementing log in system
 let currentAccount;
@@ -168,15 +178,42 @@ btnLogin.addEventListener(
       inputLoginUsername.value = inputLoginPin.value = '';
       inputLoginPin.blur(); // to remove cursor from it after getting logged in.
 
-      // 2. display movements
-      displayMovements(currentAccount.movements);
-      // 3. display balance
-      calcDisplayBalance(currentAccount.movements);
-      // 4. display summary
-      calcDisplaySummary(currentAccount);
+      // // 2. display movements
+      // displayMovements(currentAccount.movements);
+      // // 3. display balance
+      // calcDisplayBalance(currentAccount);
+      // // 4. display summary
+      // calcDisplaySummary(currentAccount);
+      updateUI(currentAccount);
     }
   }
 );
+
+// implementing money transfer function
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  console.log(amount, receiverAcc);
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  if (
+    amount > 0 &&
+    receiverAcc && // if receiver account exists
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username //to ensure that the current account holder does not send the amount to himself.
+  ) {
+    // console.log('transfer valid');
+    ///----------
+    // doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    updateUI(currentAccount);
+  }
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
