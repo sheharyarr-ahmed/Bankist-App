@@ -1,6 +1,6 @@
 'use strict';
 // learned about
-// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method,
+// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method.
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -211,6 +211,20 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
     updateUI(currentAccount);
+  }
+});
+
+//implementing the loan function
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // add the loan's movement
+    currentAccount.movements.push(amount);
+    // update the UI
+    updateUI(currentAccount);
+    inputLoanAmount.value = '';
   }
 });
 
