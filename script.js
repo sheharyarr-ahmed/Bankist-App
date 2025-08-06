@@ -66,9 +66,10 @@ const inputClosePin = document.querySelector('.form__input--pin');
 // starting point
 
 // the reason we start writing the code in the function is that Writing in the global context is dangerous, unscalable, and error-prone. Always limit scope using functions, blocks, or modules to keep your code clean, safe, and maintainable. we cannot write the variables in the global scope as it may create problems when the code grows so thats we should write the code in functions, IIFE or modules and in this case we write the code in an function.
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
         <div class="movements__type movements__type--${type}">${
@@ -248,6 +249,15 @@ btnClose.addEventListener('click', function (e) {
     // input fields clear as-well
     inputCloseUsername.value = inputClosePin.value = '';
   }
+});
+
+// implementing the sort function
+// adding an state variable
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 
 /////////////////////////////////////////////////
