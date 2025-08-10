@@ -1,6 +1,6 @@
 'use strict';
 // learned about
-// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method.
+// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method, fill method, from method,
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -259,6 +259,17 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
 });
+
+// implemetning an fucntion when we clicks on label balance the console will give the list of the movements by implementing the from method.
+// labelBalance.addEventListener('click', function () {
+//   const movementsUI = Array.from(
+//     document.querySelectorAll('.movements__value'),
+//     el => Number(el.textContent.replace('€', ''))
+//   );
+//   console.log(movementsUI);
+// another emthod oif creating the array from array like objects
+// const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+// });
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
