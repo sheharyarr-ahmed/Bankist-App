@@ -283,6 +283,14 @@ btnSort.addEventListener('click', function (e) {
 // const movementsUI2 = [...document.querySelectorAll('.movements__value')];
 // });
 
+// useage of the remainder operator with an example in this project
+
+// labelBalance.addEventListener('click', function () {
+//   [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+//     if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+//     if (i % 3 === 0) row.style.backgroundColor = 'blue';
+//   });
+// });
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
