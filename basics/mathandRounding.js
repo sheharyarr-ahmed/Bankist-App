@@ -31,3 +31,8 @@ console.log(Math.trunc(32.55678666)); // trunc removes the all decimals
 console.log((2.7).toFixed(0));
 console.log((3.222).toFixed(2)); //the no tells how many decimals we would like to show after the decimal point. and it returns the string
 console.log(+(3.222).toFixed(2));
+
+// numeric separators
+
+const largeNumber = 100_0000; //just to read easily
+console.log(largeNumber);
