@@ -78,15 +78,24 @@ const inputClosePin = document.querySelector('.form__input--pin');
 // starting point
 
 // the reason we start writing the code in the function is that Writing in the global context is dangerous, unscalable, and error-prone. Always limit scope using functions, blocks, or modules to keep your code clean, safe, and maintainable. we cannot write the variables in the global scope as it may create problems when the code grows so thats we should write the code in functions, IIFE or modules and in this case we write the code in an function.
-const displayMovements = function (movements, sort = false) {
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+const displayMovements = function (acc, sort = false) {
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
   containerMovements.innerHTML = '';
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const date = new Date(acc.movementsDates[i]);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const displayDate = `${day}/${month}/${year}`;
+
     const html = `<div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+      <div class="movements__date">${displayDate}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
@@ -158,7 +167,7 @@ createUserNames(accounts);
 // updating UI function
 const updateUI = function (acc) {
   // 2. display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
   // 3. display balance
   calcDisplayBalance(acc);
   // 4. display summary
@@ -166,8 +175,14 @@ const updateUI = function (acc) {
 };
 
 // EVENT HANDLERS
-// implementing log in system
 let currentAccount;
+
+// fake always logged in during the development
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+// implementing log in system
 btnLogin.addEventListener(
   'click',
   function (
@@ -187,6 +202,14 @@ btnLogin.addEventListener(
         currentAccount.owner.split(' ')[0]
       }`;
       containerApp.style.opacity = 100;
+      // implementing the dates under the balance section, current Date
+      const now = new Date();
+      const month = `${now.getMonth() + 1}`.padStart(2, 0);
+      const day = `${now.getDate()}`.padStart(2, 0);
+      const year = now.getFullYear();
+      const hour = `${now.getHours()}`.padStart(2, 0);
+      const min = `${now.getMinutes()}`.padStart(2, 0);
+      labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
       // clearing input fields
       inputLoginUsername.value = inputLoginPin.value = '';
       inputLoginPin.blur(); // to remove cursor from it after getting logged in.
@@ -223,6 +246,10 @@ btnTransfer.addEventListener('click', function (e) {
     // doing the transfer
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
+
+    //adding the transfer date
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
   }
 });
@@ -235,6 +262,8 @@ btnLoan.addEventListener('click', function (e) {
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // add the loan's movement
     currentAccount.movements.push(amount);
+    // adding the loan date
+    currentAccount.movementsDates.push(new Date().toISOString());
     // update the UI
     updateUI(currentAccount);
     inputLoanAmount.value = '';
@@ -268,7 +297,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(acc.movements, !sorted);
   sorted = !sorted;
 });
 
