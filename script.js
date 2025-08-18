@@ -1,6 +1,6 @@
 'use strict';
 // learned about
-// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method, fill method, from method, instead of using Number object we used + for conversion of string into an number.,
+// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method, fill method, from method, instead of using Number object we used + for conversion of string into an number.,dateOperations, iNTERNATIONALIZATION,
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -80,20 +80,21 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 // the reason we start writing the code in the function is that Writing in the global context is dangerous, unscalable, and error-prone. Always limit scope using functions, blocks, or modules to keep your code clean, safe, and maintainable. we cannot write the variables in the global scope as it may create problems when the code grows so thats we should write the code in functions, IIFE or modules and in this case we write the code in an function.
 
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs((date2 - date1) / (1000 * 60 * 60 * 24)));
 
   const daysPassed = calcDaysPassed(new Date(), date);
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';
-  if (daysPassed <= 7) return `${daysPassed} days`;
-  else {
-    const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+  // else {
+  //   const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  //   const day = `${date.getDate()}`.padStart(2, 0);
+  //   const year = date.getFullYear();
+  //   return `${day}/${month}/${year}`;
+  // }
+  return new Intl.DateTimeFormat(locale).format(date);
 };
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
@@ -111,7 +112,7 @@ const displayMovements = function (acc, sort = false) {
     const { movement, movementDate } = obj;
     const type = movement > 0 ? 'deposit' : 'withdrawal';
     const date = new Date(movementDate);
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, acc.locale);
     const html = `<div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
@@ -203,6 +204,20 @@ currentAccount = account1;
 updateUI(currentAccount);
 containerApp.style.opacity = 100;
 
+// implememtning internationalization in the date with the API
+// const now = new Date();
+// const options = {
+//   day: 'numeric',
+//   month: 'long',
+//   year: 'numeric',
+//   weekday: 'long',
+//   hour: 'numeric',
+//   minute: 'numeric',
+// };
+
+// const locale = navigator.language;
+// // console.log(locale);
+// labelDate.textContent = new Intl.DateTimeFormat('en-UK', options).format(now);
 // implementing log in system
 btnLogin.addEventListener(
   'click',
@@ -224,13 +239,31 @@ btnLogin.addEventListener(
       }`;
       containerApp.style.opacity = 100;
       // implementing the dates under the balance section, current Date
+      // const now = new Date();
+      // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+      // const day = `${now.getDate()}`.padStart(2, 0);
+      // const year = now.getFullYear();
+      // const hour = `${now.getHours()}`.padStart(2, 0);
+      // const min = `${now.getMinutes()}`.padStart(2, 0);
+      // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
+      // added the date and time on log in via internationalization api (done later)
       const now = new Date();
-      const month = `${now.getMonth() + 1}`.padStart(2, 0);
-      const day = `${now.getDate()}`.padStart(2, 0);
-      const year = now.getFullYear();
-      const hour = `${now.getHours()}`.padStart(2, 0);
-      const min = `${now.getMinutes()}`.padStart(2, 0);
-      labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+      const options = {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        // weekday: 'long',
+        hour: 'numeric',
+        minute: 'numeric',
+      };
+
+      // const locale = navigator.language;
+      // console.log(locale);
+      labelDate.textContent = new Intl.DateTimeFormat(
+        currentAccount.locale,
+        options
+      ).format(now);
       // clearing input fields
       inputLoginUsername.value = inputLoginPin.value = '';
       inputLoginPin.blur(); // to remove cursor from it after getting logged in.
@@ -321,6 +354,8 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
+
+// adding the internationalization featue and experimenting with it
 
 // implemetning an fucntion when we clicks on label balance the console will give the list of the movements by implementing the from method.
 // labelBalance.addEventListener('click', function () {
