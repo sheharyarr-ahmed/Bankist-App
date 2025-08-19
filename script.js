@@ -1,6 +1,4 @@
 'use strict';
-// learned about
-// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method, fill method, from method, instead of using Number object we used + for conversion of string into an number.,dateOperations, iNTERNATIONALIZATION, setTimeout, setInterval, adding the timer in the parent scope.
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
