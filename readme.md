@@ -71,4 +71,14 @@ Bankist demonstrates practical JavaScript at scale:
 
 This is not just a project — it’s a learning milestone that pushes you towards being an industry-ready JavaScript developer.
 
+<<<<<<< HEAD
 **note: Throughout the script.js file, you’ll find multiple comments I wrote for understanding and revision purposes. These comments highlight key concepts, explain tricky logic, and serve as personal notes. This approach reflects a good learning strategy—documenting the “why” behind the code to strengthen long-term understanding.**
+=======
+note: Throughout the script.js file, you’ll find multiple comments I wrote for understanding and revision purposes. These comments highlight key concepts, explain tricky logic, and serve as personal notes. This approach reflects a good learning strategy—documenting the “why” behind the code to strengthen long-term understanding.
+
+![Login Screenshot](./screenshots/ui.png)
+![Features](./screenshots/features.png)
+![Feature A](<./screenshots/feature(a).png>)
+![Feature B](<./screenshots/feature(b).png>)
+![Feature C](<./screenshots/feature(c).png>)
+>>>>>>> 211ca95 (updated the readme)
