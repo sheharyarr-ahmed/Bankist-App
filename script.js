@@ -1,6 +1,6 @@
 'use strict';
 // learned about
-// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method, fill method, from method, instead of using Number object we used + for conversion of string into an number.,dateOperations, iNTERNATIONALIZATION,
+// forEach, map, innerHTML, preventDefault(), insertAdjacentHTML, optional chaining(?), blur method, find method, splice method, some method, fill method, from method, instead of using Number object we used + for conversion of string into an number.,dateOperations, iNTERNATIONALIZATION, setTimeout, setInterval, adding the timer in the parent scope.
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -220,13 +220,38 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = function () {
+  const tick = function () {
+    // we added this nested fucntion of tick because the timer was at first after log in the the timer was starting fro 1 sec then the counter was being stareted there fore we made an function of tick to make the timer start immediately.
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    // in each call print the timer to UI
+    labelTimer.textContent = `${min}:${sec}`;
+    // when the time hits 0 sec trigger this
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+    // decrease the time by 1 sec
+    time--;
+  };
+  //set the time to 5 mins
+  let time = 30;
+  tick();
+  // call the timer every second
+  const timer = setInterval(tick, 1000);
+  return timer; //gives back the timer ID from setInterval so we can control it outside.
+};
+
 // EVENT HANDLERS
-let currentAccount;
+// parent scope
+let currentAccount, timer; //	the reason why we place the timer here in the parent scope that we will need its value in further operations as well. and another reason that why we p;ace is that is  the timer is that the timer started when a user logs in (btnLogin handler).But it also needs to be reset if certain actions happen like if anothert user  log ins so then timer can be rest and start again.
 
 // fake always logged in during the development
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 // implememtning internationalization in the date with the API
 // const now = new Date();
@@ -298,6 +323,13 @@ btnLogin.addEventListener(
       // calcDisplayBalance(currentAccount);
       // // 4. display summary
       // calcDisplaySummary(currentAccount);
+
+      // if timer exists on the log ino of new user, not the first log in
+      if (timer) {
+        clearInterval(timer); //ensures any old timer is stopped before starting a new one.
+      }
+      timer = startLogOutTimer(); //newly created function in the functions section
+      //starts a fresh countdown for the current session.
       updateUI(currentAccount);
     }
   }
@@ -329,6 +361,10 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movementsDates.push(new Date().toISOString());
     receiverAcc.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
+
+    //adding the functionality of reseting the timer whenver the user performs an transfer.
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -347,6 +383,9 @@ btnLoan.addEventListener('click', function (e) {
       updateUI(currentAccount);
       inputLoanAmount.value = '';
     }, 2500);
+    //adding the functionality of reseting the timer whenver the user asks for an loan.
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
