@@ -78,4 +78,3 @@ note: Throughout the script.js file, you’ll find multiple comments I wrote for
 ![Feature A](<./screenshots/feature(a).png>)
 ![Feature B](<./screenshots/feature(b).png>)
 ![Feature C](<./screenshots/feature(c).png>)
->>>>>>> 211ca95 (updated the readme)
