@@ -338,13 +338,15 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // add the loan's movement
-    currentAccount.movements.push(amount);
-    // adding the loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
-    // update the UI
-    updateUI(currentAccount);
-    inputLoanAmount.value = '';
+    setTimeout(function () {
+      // add the loan's movement
+      currentAccount.movements.push(amount);
+      // adding the loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
+      // update the UI
+      updateUI(currentAccount);
+      inputLoanAmount.value = '';
+    }, 2500);
   }
 });
 
